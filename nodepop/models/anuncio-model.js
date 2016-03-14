@@ -16,19 +16,31 @@ var anuncioSchema = mongoose.Schema({
     tags: [String]
 });
 
-anuncioSchema.statics.list = function(sort, cb) {
+anuncioSchema.statics.list = function(sort, inicio, limit, venta, cb) {
     // Preparamos la Query sin ejecutarla (No ponemos callback a find)
-    var query = Anuncio.find({});
+    console.log(venta);
+    if (venta === "true" || venta === "false"){
+        var query = Anuncio.find({venta: venta});
+        console.log("Aqui");
+    }
+    else {
+        var query = Anuncio.find({});
+    }
 
     // Añadimos mas parámetros a la query
     query.sort(sort);
+    query.skip(inicio);
+    query.limit(limit);
+
+    // console.log("sort: ", parametros.sort, "inicio: ", parametros.inicio, "limit:", parametros.limit);
+
     // La ejecutamos
     query.exec(function(err, rows) {
         if (err) {
             cb(err);
             return;
         }
-        console.log(rows);
+        // console.log(rows);
         cb(null, rows);
     });
 };

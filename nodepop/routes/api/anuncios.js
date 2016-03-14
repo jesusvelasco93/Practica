@@ -11,9 +11,23 @@ var Anuncio = mongoose.model("Anuncios");
 // Get user listing
 router.get('/', function(req, res) {
 
-    var sort = req.query.sort || 'nombre';
+/*    var parametros = {
+        sort: req.query.sort || 'nombre',
+        // venta:  "",
+        // tags: "",
+        // nombre: "",
+        // precio: "",
+        inicio: 0,
+        limit: 2
+    };*/
+    // var precio = req.quert.precio || 'A';
+    //     if 
+    var venta = req.query.venta || '';  
+    var sort =  req.query.sort || 'nombre';
+    var inicio = req.query.inicio || 0;
+    var limit = req.query.limit || 2; 
 
-    Anuncio.list(sort, function(err, rows) {
+    Anuncio.list(sort, inicio, limit, venta, function(err, rows) {
 
         if (err) {
             res.json({ result: false, err: err });
@@ -21,7 +35,7 @@ router.get('/', function(req, res) {
         }
 
         // Cuando esten disponibles los mando en JSON
-        console.log("Datos", rows);
+        /*console.log("Datos", rows);*/
         res.render('anuncios_form', { anuncios: rows});
         // res.json({ result: true, rows: rows });
     });
