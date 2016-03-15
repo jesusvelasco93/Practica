@@ -16,23 +16,70 @@ var anuncioSchema = mongoose.Schema({
     tags: [String]
 });
 
-anuncioSchema.statics.list = function(sort, inicio, limit, venta, cb) {
+anuncioSchema.statics.list = function(parametros, cb) {
     // Preparamos la Query sin ejecutarla (No ponemos callback a find)
-    console.log(venta);
-    if (venta === "true" || venta === "false"){
-        var query = Anuncio.find({venta: venta});
-        console.log("Aqui");
-    }
-    else {
-        var query = Anuncio.find({});
+    // Vemos los parametros que nos pasan
+    var criteria = {}
+
+    // Añadimos los parametros que nos han mandado
+
+    // Parametro venta
+    if (parametros.venta === "true" || parametros.venta === "false"){
+        criteria = {
+            venta: parametros.venta
+        }
     }
 
+    // Parametro PrecioMin
+    if (parametros.precioMin != '-'){
+        criteria = {
+            precio : {
+                $gte: parametros.precioMin
+            }
+        }
+        console.log("precio min");
+    }
+
+
+    // Parametro PrecioMax
+    if (parametros.precioMax != '-'){
+        criteria = {
+            precio : {
+                $lte: parametros.precioMax
+            }   
+        }
+        console.log("precio max");
+    }
+    // console.log(criteria.precio);
+
+    // Parametro Tag
+    if (parametros.tag != ''){
+        // var tag = '/^' + parametros.tag + '/i';
+        criteria = {
+            tags: parametros.tag
+            // {
+            //     $regex: tag
+            // }
+            
+        }  
+    }
+
+    // Parametro Nombre
+    if (parametros.nombre != ''){
+        criteria = {
+            //Añadir Expresion Regular
+            nombre: parametros.nombre
+        }
+    }
+
+    // Hacemos la busqueda con los parametros finales
+    var query = Anuncio.find(criteria);
     // Añadimos mas parámetros a la query
-    query.sort(sort);
-    query.skip(inicio);
-    query.limit(limit);
+    query.sort(parametros.sort);
+    query.skip(parametros.inicio);
+    query.limit(parametros.limit);
 
-    // console.log("sort: ", parametros.sort, "inicio: ", parametros.inicio, "limit:", parametros.limit);
+    console.log("sort: ", parametros.sort, "inicio: ", parametros.inicio, "limit:", parametros.limit);
 
     // La ejecutamos
     query.exec(function(err, rows) {

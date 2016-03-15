@@ -11,23 +11,43 @@ var Anuncio = mongoose.model("Anuncios");
 // Get user listing
 router.get('/', function(req, res) {
 
-/*    var parametros = {
-        sort: req.query.sort || 'nombre',
-        // venta:  "",
-        // tags: "",
-        // nombre: "",
-        // precio: "",
-        inicio: 0,
-        limit: 2
-    };*/
-    // var precio = req.quert.precio || 'A';
-    //     if 
-    var venta = req.query.venta || '';  
-    var sort =  req.query.sort || 'nombre';
-    var inicio = req.query.inicio || 0;
-    var limit = req.query.limit || 2; 
+    var precioMin = '-';
+    var precioMax = '-';
 
-    Anuncio.list(sort, inicio, limit, venta, function(err, rows) {
+    //Si tiene precio y tiene un guion
+    if (req.query.precio && req.query.precio.indexOf('-') != -1){
+         let rango = req.query.precio.split("-");
+
+         // Si tiene valor y es numerico el primer fragmento
+         if (rango[0] && !isNaN(rango[0])){
+             precioMin = rango[0];
+         }
+
+         // Si tiene valor y es numerico el segundo fragmento
+         if (rango[1] && !isNaN(rango[1])){
+             precioMax = rango[1];
+        }
+        console.log(precioMin, rango[0]);
+        console.log(precioMax, rango[1]);
+    }
+
+    if (req.query.nombre){
+        var nombre = new RegExp('^' + req.query.nombre, "i")
+    }
+    else var nombre = "";
+
+    var parametros = {
+        sort: req.query.sort || 'nombre',
+        venta: req.query.venta || '',
+        tag: req.query.tag.toLowerCase() || '',
+        nombre: nombre,
+        precioMin: precioMin,
+        precioMax: precioMax,
+        inicio: req.query.inicio || 0,
+        limit: req.query.limit || 2
+    };  
+
+    Anuncio.list(parametros, function(err, rows) {
 
         if (err) {
             res.json({ result: false, err: err });
