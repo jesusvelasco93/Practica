@@ -15,6 +15,7 @@ var users = require('./routes/users');
 
 //RUTAS DE API
 var apiAnuncios = require('./routes/api/anuncios');
+var apiUsuarios = require('./routes/api/usuarios');
 
 var app = express();
 
@@ -37,6 +38,7 @@ app.use('/', routes);
 app.use('/users', users);
 
 app.use('/api/anuncios', apiAnuncios);
+app.use('/api/usuarios', apiUsuarios);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

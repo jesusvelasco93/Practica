@@ -16,10 +16,15 @@ var anuncioSchema = mongoose.Schema({
     tags: [String]
 });
 
-anuncioSchema.statics.list = function(parametros, cb) {
+anuncioSchema.statics.list = function(parametros, cb){
     // Preparamos la Query sin ejecutarla (No ponemos callback a find)
     // Vemos los parametros que nos pasan
     var criteria = {}
+    // var paginacion = {
+    //     paginaActual = parametros.inicio,
+    //     numElementosPorPagina = parametros.limit,
+    //     numPaginas = Anuncio.find()/parametros,
+    // }
 
     // Añadimos los parametros que nos han mandado
 
@@ -56,7 +61,7 @@ anuncioSchema.statics.list = function(parametros, cb) {
     if (parametros.tag != ''){
         // var tag = '/^' + parametros.tag + '/i';
         criteria = {
-            tags: parametros.tag
+            tags: parametros.tag.toLowerCase()
             // {
             //     $regex: tag
             // }
@@ -74,6 +79,7 @@ anuncioSchema.statics.list = function(parametros, cb) {
 
     // Hacemos la busqueda con los parametros finales
     var query = Anuncio.find(criteria);
+    // numElementos = query.length;
     // Añadimos mas parámetros a la query
     query.sort(parametros.sort);
     query.skip(parametros.inicio);

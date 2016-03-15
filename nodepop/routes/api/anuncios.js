@@ -4,9 +4,9 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require("mongoose");
 var Anuncio = mongoose.model("Anuncios");
-// var auth = require("../../../lib/auth");
+var auth = require("../../lib/auth");
 
-// router.use(auth("admin", "pass2"));
+router.use(auth());
 
 // Get user listing
 router.get('/', function(req, res) {
@@ -39,7 +39,7 @@ router.get('/', function(req, res) {
     var parametros = {
         sort: req.query.sort || 'nombre',
         venta: req.query.venta || '',
-        tag: req.query.tag.toLowerCase() || '',
+        tag: req.query.tag || '',
         nombre: nombre,
         precioMin: precioMin,
         precioMax: precioMax,
