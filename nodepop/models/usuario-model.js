@@ -14,18 +14,19 @@ var usuarioSchema = mongoose.Schema({
     clave: String
 });
 
-usuarioSchema.statics.list = function(sort, cb){
+usuarioSchema.statics.list = function(nombre, cb){
     // Preparamos la Query sin ejecutarla (No ponemos callback a find)
-    var query = Usuario.find({});
+    var query = Usuario.find();
 
     // Añadimos mas parámetros a la query
-    query.sort(sort);
+
     // La ejecutamos
     query.exec(function(err, rows){
         if (err){
             cb(err);
             return;
         }
+        console.log(rows);
         cb(null, rows);
     });
 };

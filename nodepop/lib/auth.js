@@ -3,44 +3,45 @@
 var basicAuth = require("basic-auth");
 var mongoose = require("mongoose");
 var Usuario = mongoose.model("Usuarios");
-
 var encontrado = false;
-var nombre = "";
 
 // Autenticacion con basic-auth
 var fn = function() {
 
     return function(req, res, next) {
         var userRequest = basicAuth(req);
-        if (!userRequest) {
-            // if (!userRequest || userRequest.name !== user || userRequest.pass !== pass) {
+
+        if (!userRequest || userRequest.name === "" || userRequest.pass === "") {
             res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
             res.send(401);
             return;
         }
 
-        var nombreUsuario = userRequest.name.toString().trim();
-        var claveUsuario = userRequest.pass.toString().trim();
+        var nombre = userRequest.name;
+        var clave = userRequest.pass;
 
-        var usuarios = "";
+        console.log(nombre, clave);
 
-        Usuario.list("", function(err, rows) {
+        Usuario.list(nombre, function(err, rows) {
 
             if (err) {
-                res.json({ result: false, err: err });
+                res.set("Error para recuperar");
+                res.send(401);
                 return;
             }
-            usuarios = rows;
-            // res.json({ result: true, rows: rows });
-        });
-        for ( i in usuarios){
-            if (usuarios[i].nombre.toString().trim() == nombreUsuario){
-                if (usuarios[i].clave.toString().trim() == claveUsuario){
-                    console.log("Estoy");
+            console.log(rows);
+            for (var i in rows) {
+                if (rows[i].clave === clave) {
+                    encontrado=true;
+                    next();
                 }
             }
-        }
-        next();
+            if (!encontrado){
+                 res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+                 res.send(401);
+                 return;
+            }
+        });
     };
 };
 

@@ -4,16 +4,13 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require("mongoose");
 var Usuario = mongoose.model("Usuarios");
-var auth = require("../../lib/auth");
-
-router.use(auth());
 
 // Get user listing
 router.get('/', function(req, res) {
 
-    var sort = req.query.sort || 'name';
+    var nombre = req.query.nombre || '';
 
-    Usuario.list(sort, function(err, rows) {
+    Usuario.list(nombre, function(err, rows) {
 
         if (err) {
             res.json({ result: false, err: err });
@@ -21,7 +18,7 @@ router.get('/', function(req, res) {
         }
 
         // Cuando esten disponibles los mando en JSON
-        console.log("Usuarios", rows);
+        // console.log("Usuarios", rows);
         res.render('usuarios-form', { usuarios: rows});
         // res.json({ result: true, rows: rows });
     });
