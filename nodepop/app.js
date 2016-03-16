@@ -19,8 +19,6 @@ var apiUsuarios = require('./routes/api/usuarios');
 
 var app = express();
 
-// servir archivos estaticos
-/*app.use(express.static(__dirname + '/public/images'));*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,6 +31,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// servir archivos estaticos
+app.use('/api/anuncios/imagenes/', express.static(__dirname + '/public/images'));
 
 app.use('/', routes);
 app.use('/users', users);
