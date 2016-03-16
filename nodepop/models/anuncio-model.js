@@ -79,7 +79,8 @@ anuncioSchema.statics.list = function(parametros, cb){
 
     // Hacemos la busqueda con los parametros finales
     var query = Anuncio.find(criteria);
-    // numElementos = query.length;
+    var numElemTotal = 0;
+
     // Añadimos mas parámetros a la query
     query.sort(parametros.sort);
     query.skip(parametros.inicio);
@@ -93,8 +94,30 @@ anuncioSchema.statics.list = function(parametros, cb){
             cb(err);
             return;
         }
-        // console.log(rows);
+        var numElemMostrados = rows.length;
         cb(null, rows);
+    });
+};
+
+anuncioSchema.statics.listTags = function(cb){
+    // Preparamos la Query sin ejecutarla (No ponemos callback a find)
+    // let arraye = [];
+    var array = [];
+    var query = Anuncio.find({});
+    // Añadimos mas parámetros a la query
+
+    // La ejecutamos
+    query.exec(function(err, rows){
+        if (err){
+            cb(err);
+            return;
+        }
+        for (var i in rows){
+            array = array.concat(rows[i].tags.filter(function(item){
+                return array.indexOf(item) < 0;
+            }));;
+        }
+        cb(null, array.sort());
     });
 };
 

@@ -1,5 +1,6 @@
 "use strict";
 
+var sha = require("sha256");
 var basicAuth = require("basic-auth");
 var mongoose = require("mongoose");
 var Usuario = mongoose.model("Usuarios");
@@ -17,26 +18,24 @@ var fn = function() {
             return;
         }
 
-        var nombre = userRequest.name;
+        var nombreUsuario = {nombre: userRequest.name.toLowerCase().toString()};
         var clave = userRequest.pass;
 
-        console.log(nombre, clave);
+        console.log(nombreUsuario.nombre, clave);
 
-        Usuario.list(nombre, function(err, rows) {
+        Usuario.findOne(nombreUsuario, function(err, user) {
 
             if (err) {
-                res.set("Error para recuperar");
+                res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
                 res.send(401);
                 return;
             }
-            console.log(rows);
-            for (var i in rows) {
-                if (rows[i].clave === clave) {
+            // console.log(rows);
+            if (user && user.clave === sha(clave)) {
                     encontrado=true;
                     next();
-                }
             }
-            if (!encontrado){
+            else {
                  res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
                  res.send(401);
                  return;

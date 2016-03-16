@@ -14,9 +14,9 @@ var usuarioSchema = mongoose.Schema({
     clave: String
 });
 
-usuarioSchema.statics.list = function(nombre, cb){
+usuarioSchema.statics.list = function(cb){
     // Preparamos la Query sin ejecutarla (No ponemos callback a find)
-    var query = Usuario.find();
+    var query = Usuario.find({});
 
     // Añadimos mas parámetros a la query
 
@@ -26,7 +26,7 @@ usuarioSchema.statics.list = function(nombre, cb){
             cb(err);
             return;
         }
-        console.log(rows);
+        // console.log(rows);
         cb(null, rows);
     });
 };

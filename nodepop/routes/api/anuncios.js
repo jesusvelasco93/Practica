@@ -53,25 +53,44 @@ router.get('/', function(req, res) {
             res.json({ result: false, err: err });
             return;
         }
+        Anuncio.listTags(function(err,tags){
+            if (err) {
+                res.json({ result: false, err: err });
+                return;
+            }
+            // console.log(tags);
 
+            res.render('anuncios_form', { anuncios: rows, listaTags: tags});
+        });
         // Cuando esten disponibles los mando en JSON
         /*console.log("Datos", rows);*/
-        res.render('anuncios_form', { anuncios: rows});
+
         // res.json({ result: true, rows: rows });
     });
 });
 
 router.post('/', function(req, res) {
 
-    // Instaciamos objeto en memoria
-    var anuncio = new Anuncio(req.body);
-    // Lo guardamos en la Base de Datos
-    anuncio.save(function(err, newRow) {
-        if (err) {
-            res.json({ result: false, err: err });
-            return;
+    Anuncio.findOne({nombre: new RegExp('^' + req.body.nombre, "i")}, function(err, row){
+        if (!row){
+            // Instaciamos objeto en memoria
+            var anuncio = new Anuncio(req.body);
+            for (var i in anuncio.tags){
+                anuncio.tags[i] = anuncio.tags[i].toLowerCase();
+            }
+            console.log(anuncio);
+            // Lo guardamos en la Base de Datos
+            anuncio.save(function(err, newRow) {
+                if (err) {
+                    res.json({ result: false, err: err });
+                    return;
+                }
+                res.json({ result: true, row: newRow });
+            });
         }
-        res.json({ result: true, row: newRow });
+        else {
+            res.json({ result: false, err: "Anuncio ya existente"});
+        }
     });
 });
 
