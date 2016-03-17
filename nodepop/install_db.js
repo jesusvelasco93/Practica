@@ -2,8 +2,8 @@
 
 var fs = require("fs");
 
-require("./models/anuncios-Model.js");
-require("./models/usuarios-Model.js");
+require("./models/anuncio-model");
+require("./models/usuario-model");
 
 var sha = require("sha256");
 var mongoose = require("mongoose");
@@ -22,9 +22,9 @@ function cargaAnuncios(callback) {
 
         fs.readFile("./anuncios.json", { encoding: "utf8" }, function(err, data) {
             if (err) {
-                console.log("Ha habido un error: \n", err);
+                console.log("Ha habido un error:", err);
             } else {
-                var listaAnuncios = JSON.parse(data); 
+                var listaAnuncios = JSON.parse(data);
 
                 //Recorremos el array
                 for (var i in listaAnuncios.anuncios) {
@@ -55,9 +55,9 @@ function cargaUsuarios(callback) {
         fs.readFile("./usuarios.json", { encoding: "utf8" }, function(err, data) {
             if (err) {
                 console.log("Ha habido un error: ", err);
-            } else { 
+            } else {
                 var listaUsuarios = JSON.parse(data);
-                console.log(typeof(listaUsuarios)); 
+                console.log( "Estoy aqui", typeof(listaUsuarios));
 
                 // Recorremos el array
                 for (var i in listaUsuarios.usuarios) {
@@ -79,13 +79,13 @@ function cargaUsuarios(callback) {
     });
 }
 
-cargaAnuncios(function(err, anuncios) {
-    if (err) {
-        console.log("Ha ocurrido un error", err);
-        return;
-    }
-    console.log("Anuncios cargados", anuncios);
-});
+// cargaAnuncios(function(err, anuncios) {
+//     if (err) {
+//         console.log("Ha ocurrido un error", err);
+//         return;
+//     }
+//     console.log("Anuncios cargados", anuncios);
+// });
 
 cargaUsuarios(function(err, usuarios) {
     if (err) {
