@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 var sha = require("sha256");
 var express = require('express');
@@ -11,7 +11,7 @@ router.post('/', function(req, res) {
 
     if (req.body.nombre !== "" && req.body.clave !== "" && req.body.email !== ""){
 
-        var user = {}
+        var user = {};
         Usuario.findOne({nombre: req.body.nombre.toLowerCase()}, function(err, row){
 
             if (err) {
@@ -27,7 +27,7 @@ router.post('/', function(req, res) {
                             nombre: req.body.nombre.toLowerCase() || "",
                             clave: sha(req.body.clave) || "",
                             email: req.body.email || ""
-                        }
+                        };
                         if (user.nombre !== "" && user.clave !== "" && user.email !== ""){
                             var usuario = new Usuario(user);
                             usuario.save(function(err, newRow) {

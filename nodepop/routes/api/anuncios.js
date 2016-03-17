@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 var express = require('express');
 var router = express.Router();
@@ -18,7 +18,7 @@ router.get('/', function(req, res) {
     // Si tiene precio y tiene un guion
     if (req.query.precio) {
         if (req.query.precio.indexOf('-') != -1) {
-            let rango = req.query.precio.split("-");
+            var rango = req.query.precio.split("-");
 
             // Si tiene valor y es numerico el primer fragmento
             if (rango[0] && !isNaN(rango[0])) {
@@ -43,9 +43,10 @@ router.get('/', function(req, res) {
     }
 
     // Establecemos un expresión regular para el nombre con lo que nos ha introducido
+    var nombre = "";
     if (req.query.nombre) {
-        var nombre = new RegExp('^' + req.query.nombre, "i")
-    } else var nombre = "";
+        nombre = new RegExp('^' + req.query.nombre, "i");
+    }
 
     // Objeto que le pasamos al list, con los basicos si no vienen en la query
     var parametros = {
@@ -101,7 +102,9 @@ router.post('/', function(req, res) {
             // Verificamos que no hay campos vacios
             if (anuncio.nombre !== "" && anuncio.precio !== "" && anuncio.venta !== "" && anuncio.foto !== "" && anuncio.tags.length !== 0) {
                 for (var i in anuncio.tags) {
-                    anuncio.tags[i] = anuncio.tags[i].toLowerCase();
+                    if (anuncio.tags){
+                        anuncio.tags[i] = anuncio.tags[i].toLowerCase();
+                    }
                 }
 
                 // Lo guardamos en la Base de Datos

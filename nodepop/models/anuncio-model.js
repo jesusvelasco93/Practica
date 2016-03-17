@@ -3,7 +3,7 @@
 // Conectar con driver
 // Conecctar con la base de datos
 
-var conn = require('../lib/connectMongoose');
+require('../lib/connectMongoose');
 var mongoose = require('mongoose');
 
 // Creo el esquema
@@ -18,61 +18,59 @@ var anuncioSchema = mongoose.Schema({
 anuncioSchema.statics.list = function(parametros, cb){
 
     // Creamos un objeto para añadir los parametros a la busqueda
-    var criteria = {}
+    var criteria = {};
 
     // Añadimos los parametros que nos han mandado
 
-    // Parametro venta
+    // Parametro
     if (parametros.venta === "true" || parametros.venta === "false"){
         criteria = {
             venta: parametros.venta
-        }
+        };
     }
 
     // Parametro Precio exacto
-    if (parametros.precio != '-'){
+    if (parametros.precio !== '-'){
         criteria = {
             precio : parametros.precio
-        }
+        };
     }
 
     // Parametro PrecioMin
-    if (parametros.precioMin != '-'){
+    if (parametros.precioMin !== '-'){
         criteria = {
             precio : {
                 $gte: parametros.precioMin
             }
-        }
+        };
     }
 
     // Parametro PrecioMax
-    if (parametros.precioMax != '-'){
+    if (parametros.precioMax !== '-'){
         criteria = {
             precio : {
                 $lte: parametros.precioMax
             }   
-        }
+        };
     }
 
     // Parametro Tag
-    if (parametros.tag != ''){
+    if (parametros.tag !== ''){
         criteria = {
             tags: parametros.tag.toLowerCase()
-            
-        }  
+        } ; 
     }
 
     // Parametro Nombre
-    if (parametros.nombre != ''){
+    if (parametros.nombre !== ''){
         criteria = {
             nombre: parametros.nombre
-        }
+        };
     }
 
     // Preparamos la Query sin ejecutarla (No ponemos callback a find)
     // Hacemos la busqueda con los parametros finales
     var query = Anuncio.find(criteria);
-    var numElemTotal = 0;
 
     // Añadimos mas parámetros a la query
     query.sort(parametros.sort);
@@ -110,12 +108,14 @@ anuncioSchema.statics.listTags = function(cb){
             cb(err);
             return;
         }
-
+        var filtro = function(item){
+                return array.indexOf(item) < 0;
+        };
         // Añadimos al array los tags del array sin repetir
         for (var i in rows){
-            array = array.concat(rows[i].tags.filter(function(item){
-                return array.indexOf(item) < 0;
-            }));;
+            if (rows[i].tags){
+                array = array.concat(rows[i].tags.filter(filtro));
+            }
         }
 
         // Devolvemos los resultados
