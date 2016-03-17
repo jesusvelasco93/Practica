@@ -1,3 +1,0 @@
-<div style="width:100%">
-    <p><%= "Mostrando " + numElemMostra + " de " + numElem +"     .Página actual: " + numPagActual + " de " + numPags %></p>
-</div>

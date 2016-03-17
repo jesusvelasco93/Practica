@@ -8,88 +8,115 @@ var auth = require("../../lib/auth");
 
 router.use(auth());
 
-// Get user listing
+// Get anuncios listing
 router.get('/', function(req, res) {
 
     var precioMin = '-';
     var precioMax = '-';
+    var precio = '-';
 
-    //Si tiene precio y tiene un guion
-    if (req.query.precio && req.query.precio.indexOf('-') != -1){
-         let rango = req.query.precio.split("-");
+    // Si tiene precio y tiene un guion
+    if (req.query.precio) {
+        if (req.query.precio.indexOf('-') != -1) {
+            let rango = req.query.precio.split("-");
 
-         // Si tiene valor y es numerico el primer fragmento
-         if (rango[0] && !isNaN(rango[0])){
-             precioMin = rango[0];
-         }
+            // Si tiene valor y es numerico el primer fragmento
+            if (rango[0] && !isNaN(rango[0])) {
+                precioMin = rango[0];
+            }
 
-         // Si tiene valor y es numerico el segundo fragmento
-         if (rango[1] && !isNaN(rango[1])){
-             precioMax = rango[1];
+            // Si tiene valor y es numerico el segundo fragmento
+            if (rango[1] && !isNaN(rango[1])) {
+                precioMax = rango[1];
+            }
+            console.log(precioMin, rango[0]);
+            console.log(precioMax, rango[1]);
         }
-        console.log(precioMin, rango[0]);
-        console.log(precioMax, rango[1]);
+
+        // Si no comprabamos si ha introducido un número
+        // Si lo es lo guardamos   
+        else {
+            if (!isNaN(parseInt(req.query.precio))) {
+                precio = parseInt(req.query.precio);
+            }
+        }
     }
 
-    if (req.query.nombre){
+    // Establecemos un expresión regular para el nombre con lo que nos ha introducido
+    if (req.query.nombre) {
         var nombre = new RegExp('^' + req.query.nombre, "i")
-    }
-    else var nombre = "";
+    } else var nombre = "";
 
+    // Objeto que le pasamos al list, con los basicos si no vienen en la query
     var parametros = {
         sort: req.query.sort || 'nombre',
         venta: req.query.venta || '',
         tag: req.query.tag || '',
         nombre: nombre,
+        precio: precio,
         precioMin: precioMin,
         precioMax: precioMax,
         inicio: req.query.inicio || 0,
-        limit: req.query.limit || 2
-    };  
+        limit: req.query.limit || 0
+    };
 
+    // Llamamos a la busqueda con estos parametros y se lo devolvemos o renderizamos a la vista
     Anuncio.list(parametros, function(err, rows) {
 
         if (err) {
             res.json({ result: false, err: err });
             return;
         }
-        Anuncio.listTags(function(err,tags){
-            if (err) {
-                res.json({ result: false, err: err });
-                return;
-            }
-            // console.log(tags);
 
-            res.render('anuncios_form', { anuncios: rows, listaTags: tags});
-        });
-        // Cuando esten disponibles los mando en JSON
-        /*console.log("Datos", rows);*/
-
-        // res.json({ result: true, rows: rows });
+        // res.json({ result: true, anuncios: rows });
+        res.render('anuncios_form', { anuncios: rows });
     });
 });
 
+// Get tags listing
+router.get('/tags', function(req, res) {
+    Anuncio.listTags(function(err, tags) {
+        if (err) {
+            res.json({ result: false, err: err });
+            return;
+        }
+
+        // res.json({ result: true, anuncios: tags });
+        res.render('tags_form', { listaTags: tags });
+    });
+});
+
+// Post anuncios
 router.post('/', function(req, res) {
 
-    Anuncio.findOne({nombre: new RegExp('^' + req.body.nombre, "i")}, function(err, row){
-        if (!row){
+    //Comprobamos que no haya ninguno repetido
+    Anuncio.findOne({ nombre: new RegExp('^' + req.body.nombre + '$', "i") }, function(err, row) {
+
+        // Si no ha encontrado ninguno 
+        if (!row) {
+
             // Instaciamos objeto en memoria
             var anuncio = new Anuncio(req.body);
-            for (var i in anuncio.tags){
-                anuncio.tags[i] = anuncio.tags[i].toLowerCase();
-            }
-            console.log(anuncio);
-            // Lo guardamos en la Base de Datos
-            anuncio.save(function(err, newRow) {
-                if (err) {
-                    res.json({ result: false, err: err });
-                    return;
+
+            // Verificamos que no hay campos vacios
+            if (anuncio.nombre !== "" && anuncio.precio !== "" && anuncio.venta !== "" && anuncio.foto !== "" && anuncio.tags.length !== 0) {
+                for (var i in anuncio.tags) {
+                    anuncio.tags[i] = anuncio.tags[i].toLowerCase();
                 }
-                res.json({ result: true, row: newRow });
-            });
-        }
-        else {
-            res.json({ result: false, err: "Anuncio ya existente"});
+
+                // Lo guardamos en la Base de Datos
+                anuncio.save(function(err, newRow) {
+                    if (err) {
+                        res.json({ result: false, err: err });
+                        return;
+                    }
+                    res.json({ result: true, row: newRow });
+                });
+            } else {
+                res.json({ result: false, err: "Campos Vacios" });
+            }
+        } else {
+            res.json({ result: false, err: "Anuncio ya existente" });
         }
     });
 });

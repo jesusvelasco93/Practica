@@ -6,26 +6,9 @@ var router = express.Router();
 var mongoose = require("mongoose");
 var Usuario = mongoose.model("Usuarios");
 
-// Get user listing
-router.get('/', function(req, res) {
-
-    Usuario.list(function(err, rows) {
-
-        if (err) {
-            res.json({ result: false, err: err });
-            return;
-        }
-
-        // Cuando esten disponibles los mando en JSON
-        // console.log("Usuarios", rows);
-        res.render('usuarios-form', { usuarios: rows});
-        // res.json({ result: true, rows: rows });
-    });
-});
 
 router.post('/', function(req, res) {
 
-    // Instaciamos objeto en memoria
     if (req.body.nombre !== "" && req.body.clave !== "" && req.body.email !== ""){
 
         var user = {}
@@ -52,7 +35,7 @@ router.post('/', function(req, res) {
                                     res.json({ result: false, err: err });
                                     return;
                                 }
-                                res.json({ result: true, row: newRow });
+                                res.json({ result: true, nombre: newRow.nombre, clave: "******", email: newRow.email });
                             });
                         }
                         else{

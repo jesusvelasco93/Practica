@@ -1,9 +1,8 @@
 "use strict";
 
-// conectar con driver
-// var basedatos = require('../lib/connectMongo');
+// Conectar con driver
+// Conecctar con la base de datos
 
-//conecctar con
 var conn = require('../lib/connectMongoose');
 var mongoose = require('mongoose');
 
@@ -17,14 +16,9 @@ var anuncioSchema = mongoose.Schema({
 });
 
 anuncioSchema.statics.list = function(parametros, cb){
-    // Preparamos la Query sin ejecutarla (No ponemos callback a find)
-    // Vemos los parametros que nos pasan
+
+    // Creamos un objeto para añadir los parametros a la busqueda
     var criteria = {}
-    // var paginacion = {
-    //     paginaActual = parametros.inicio,
-    //     numElementosPorPagina = parametros.limit,
-    //     numPaginas = Anuncio.find()/parametros,
-    // }
 
     // Añadimos los parametros que nos han mandado
 
@@ -35,6 +29,13 @@ anuncioSchema.statics.list = function(parametros, cb){
         }
     }
 
+    // Parametro Precio exacto
+    if (parametros.precio != '-'){
+        criteria = {
+            precio : parametros.precio
+        }
+    }
+
     // Parametro PrecioMin
     if (parametros.precioMin != '-'){
         criteria = {
@@ -42,9 +43,7 @@ anuncioSchema.statics.list = function(parametros, cb){
                 $gte: parametros.precioMin
             }
         }
-        console.log("precio min");
     }
-
 
     // Parametro PrecioMax
     if (parametros.precioMax != '-'){
@@ -53,18 +52,12 @@ anuncioSchema.statics.list = function(parametros, cb){
                 $lte: parametros.precioMax
             }   
         }
-        console.log("precio max");
     }
-    // console.log(criteria.precio);
 
     // Parametro Tag
     if (parametros.tag != ''){
-        // var tag = '/^' + parametros.tag + '/i';
         criteria = {
             tags: parametros.tag.toLowerCase()
-            // {
-            //     $regex: tag
-            // }
             
         }  
     }
@@ -72,11 +65,11 @@ anuncioSchema.statics.list = function(parametros, cb){
     // Parametro Nombre
     if (parametros.nombre != ''){
         criteria = {
-            //Añadir Expresion Regular
             nombre: parametros.nombre
         }
     }
 
+    // Preparamos la Query sin ejecutarla (No ponemos callback a find)
     // Hacemos la busqueda con los parametros finales
     var query = Anuncio.find(criteria);
     var numElemTotal = 0;
@@ -86,41 +79,49 @@ anuncioSchema.statics.list = function(parametros, cb){
     query.skip(parametros.inicio);
     query.limit(parametros.limit);
 
-    console.log("sort: ", parametros.sort, "inicio: ", parametros.inicio, "limit:", parametros.limit);
-
     // La ejecutamos
     query.exec(function(err, rows) {
+
+        // Devolvemos error
         if (err) {
             cb(err);
             return;
         }
-        var numElemMostrados = rows.length;
+        // var numElemMostrados = rows.length;
+
+        // O devolvemos los resultados
         cb(null, rows);
     });
 };
 
 anuncioSchema.statics.listTags = function(cb){
-    // Preparamos la Query sin ejecutarla (No ponemos callback a find)
-    // let arraye = [];
+
+    // Creamos un array donde guardaremos los tags
     var array = [];
+
+    // Preparamos la Query sin ejecutarla (No ponemos callback a find)
     var query = Anuncio.find({});
-    // Añadimos mas parámetros a la query
 
     // La ejecutamos
     query.exec(function(err, rows){
+
+        // Devolvemos error
         if (err){
             cb(err);
             return;
         }
+
+        // Añadimos al array los tags del array sin repetir
         for (var i in rows){
             array = array.concat(rows[i].tags.filter(function(item){
                 return array.indexOf(item) < 0;
             }));;
         }
+
+        // Devolvemos los resultados
         cb(null, array.sort());
     });
 };
-
 
 // Lo registro en mongoose
 var Anuncio = mongoose.model("Anuncios", anuncioSchema);
