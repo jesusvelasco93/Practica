@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-var sha = require("sha256");
-var basicAuth = require("basic-auth");
-var mongoose = require("mongoose");
-var Usuario = mongoose.model("Usuarios");
+var sha = require('sha256');
+var basicAuth = require('basic-auth');
+var mongoose = require('mongoose');
+var Usuario = mongoose.model('Usuarios');
 var encontrado = false;
 
 // Autenticacion con basic-auth
@@ -12,7 +12,7 @@ var fn = function() {
     return function(req, res, next) {
         var userRequest = basicAuth(req);
 
-        if (!userRequest || userRequest.name === "" || userRequest.pass === "") {
+        if (!userRequest || userRequest.name === '' || userRequest.pass === '') {
             res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
             res.send(401);
             return;

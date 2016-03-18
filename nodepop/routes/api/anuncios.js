@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
 var express = require('express');
 var router = express.Router();
-var mongoose = require("mongoose");
-var Anuncio = mongoose.model("Anuncios");
-var auth = require("../../lib/auth");
+var mongoose = require('mongoose');
+var Anuncio = mongoose.model('Anuncios');
+var auth = require('../../lib/auth');
 
 router.use(auth());
 
@@ -18,7 +18,7 @@ router.get('/', function(req, res) {
     // Si tiene precio y tiene un guion
     if (req.query.precio) {
         if (req.query.precio.indexOf('-') != -1) {
-            var rango = req.query.precio.split("-");
+            var rango = req.query.precio.split('-');
 
             // Si tiene valor y es numerico el primer fragmento
             if (rango[0] && !isNaN(rango[0])) {
@@ -43,9 +43,9 @@ router.get('/', function(req, res) {
     }
 
     // Establecemos un expresión regular para el nombre con lo que nos ha introducido
-    var nombre = "";
+    var nombre = '';
     if (req.query.nombre) {
-        nombre = new RegExp('^' + req.query.nombre, "i");
+        nombre = new RegExp('^' + req.query.nombre, 'i');
     }
 
     // Objeto que le pasamos al list, con los basicos si no vienen en la query
@@ -91,7 +91,7 @@ router.get('/tags', function(req, res) {
 router.post('/', function(req, res) {
 
     //Comprobamos que no haya ninguno repetido
-    Anuncio.findOne({ nombre: new RegExp('^' + req.body.nombre + '$', "i") }, function(err, row) {
+    Anuncio.findOne({ nombre: new RegExp('^' + req.body.nombre + '$', 'i') }, function(err, row) {
 
         // Si no ha encontrado ninguno 
         if (!row) {
@@ -100,7 +100,7 @@ router.post('/', function(req, res) {
             var anuncio = new Anuncio(req.body);
 
             // Verificamos que no hay campos vacios
-            if (anuncio.nombre !== "" && anuncio.precio !== "" && anuncio.venta !== "" && anuncio.foto !== "" && anuncio.tags.length !== 0) {
+            if (anuncio.nombre !== '' && anuncio.precio !== '' && anuncio.venta !== '' && anuncio.foto !== '' && anuncio.tags.length !== 0) {
                 for (var i in anuncio.tags) {
                     if (anuncio.tags){
                         anuncio.tags[i] = anuncio.tags[i].toLowerCase();
@@ -116,10 +116,10 @@ router.post('/', function(req, res) {
                     res.json({ result: true, row: newRow });
                 });
             } else {
-                res.json({ result: false, err: "Campos Vacios" });
+                res.json({ result: false, err: 'Campos Vacios' });
             }
         } else {
-            res.json({ result: false, err: "Anuncio ya existente" });
+            res.json({ result: false, err: 'Anuncio ya existente' });
         }
     });
 });

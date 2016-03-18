@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // Conectar con driver
 // Conecctar con la base de datos
@@ -23,7 +23,7 @@ anuncioSchema.statics.list = function(parametros, cb){
     // Añadimos los parametros que nos han mandado
 
     // Parametro
-    if (parametros.venta === "true" || parametros.venta === "false"){
+    if (parametros.venta === 'true' || parametros.venta === 'false'){
         criteria = {
             venta: parametros.venta
         };
@@ -124,4 +124,4 @@ anuncioSchema.statics.listTags = function(cb){
 };
 
 // Lo registro en mongoose
-var Anuncio = mongoose.model("Anuncios", anuncioSchema);
+var Anuncio = mongoose.model('Anuncios', anuncioSchema);

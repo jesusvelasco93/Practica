@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // conectar con driver
 // var basedatos = require('../lib/connectMongo');
@@ -32,4 +32,4 @@ usuarioSchema.statics.list = function(cb){
 
 
 // Lo registro en mongoose
-var Usuario = mongoose.model("Usuarios", usuarioSchema);
+var Usuario = mongoose.model('Usuarios', usuarioSchema);
