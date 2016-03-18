@@ -1,0 +1,18 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <h1>USUARIOS</h1>
+    <% usuarios.forEach(function(usuario){ %>
+    <div style="height:100px width:100%">
+        <p><%= "NOMBRE: " + usuario.nombre + " CLAVE: " + usuario.clave + " EMAIL: " + usuario.email %></p>
+
+    </div>
+    <% }) %>
+
+</body>
+
+</html>

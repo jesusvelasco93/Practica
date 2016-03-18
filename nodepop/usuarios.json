@@ -1,0 +1,24 @@
+{
+    "usuarios": [
+        {
+            "nombre" : "gominola",
+            "clave" : "god",
+            "email" : "gominola@hotmail.com"
+        },
+        {
+            "nombre" : "pepe",
+            "clave" : "god",
+            "email" : "pepe@hotmail.com"
+        },
+        {
+            "nombre" : "juan",
+            "clave" : "god",
+            "email" : "Juan@hotmail.com"
+        },
+        {
+            "nombre" : "rosa",
+            "clave" : "god",
+            "email" : "Rosa@hotmail.com"
+        }
+    ]
+}

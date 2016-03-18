@@ -1,0 +1,7 @@
+# Node modules
+nodepop/node_modules/
+
+app_express/node_modules
+
+# Base de datos
+BaseDatos/data/db/

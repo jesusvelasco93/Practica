@@ -1,0 +1,62 @@
+
+{
+    "anuncios": [
+        {
+            "nombre" : "Iphone5",
+            "precio" : 125,
+            "venta" : true,
+            "foto" : "iphone5.png",
+            "tags" : [ 
+                "telefono"
+            ]
+        }, {
+            "nombre" : "Bicicleta",
+            "precio" : 50,
+            "venta" : false,
+            "foto" : "Bici.png",
+            "tags" : [ 
+                "vehiculo", 
+                "transporte", 
+                "ruedas"
+            ]
+        }, {
+            "nombre" : "Ordenador",
+            "precio" : 250,
+            "venta" : true,
+            "foto" : "ordenador.png",
+            "tags" : [ 
+                "ordenador", 
+                "informatica"
+            ]
+        }, {
+            "nombre" : "Mesa",
+            "precio" : 100,
+            "venta" : false,
+            "foto" : "mesa.png",
+            "tags" : [ 
+                "mueble", 
+                "apoyo", 
+                "casa"
+            ]
+        }, {
+            "nombre" : "Cuadro",
+            "precio" : 25,
+            "venta" : true,
+            "foto" : "cuadro.png",
+            "tags" : [ 
+                "arte", 
+                "decoracion", 
+                "casa"
+            ]
+        },{
+            "nombre" : "Poster",
+            "precio" : 5,
+            "venta" : true,
+            "foto" : "poster.png",
+            "tags" : [ 
+                "arte", 
+                "decoracion"
+            ]
+        }
+    ]
+}
