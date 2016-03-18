@@ -13,7 +13,7 @@ var Usuarios = mongoose.model("Usuarios");
 
 
 function cargaAnuncios(callback) {
-    //anuncios.remove({});
+
     Anuncios.remove({}, function(err) {
         if (err) {
             return callback(err);
@@ -45,7 +45,7 @@ function cargaAnuncios(callback) {
 }
 
 function cargaUsuarios(callback) {
-    //anuncios.remove({});
+
     Usuarios.remove({}, function(err) {
         if (err) {
             return callback(err);
@@ -57,12 +57,9 @@ function cargaUsuarios(callback) {
                 console.log("Ha habido un error: ", err);
             } else {
                 var listaUsuarios = JSON.parse(data);
-                console.log( "Estoy aqui", typeof(listaUsuarios));
-
                 // Recorremos el array
                 for (var i in listaUsuarios.usuarios) {
                     var usuario = new Usuarios(listaUsuarios.usuarios[i]);
-                    console.log(usuario.clave);
                     usuario.clave = sha(usuario.clave);
 
                     usuario.save(function(err) {

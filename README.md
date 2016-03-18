@@ -130,3 +130,14 @@ tanto por parte del error como si no hay ningún contratiempo.
 
     En el caso de que haya ocurrido algún error, se devolverá el resultado de la operación
     (false) y el motivo del error porque no se ha podido realizar la operación.
+
+
+!----------------------------- Información adicional ------------------------------------!
+
+Para acceder a las rutas y probar el api hay que poner en el navegador:
+
+- Anuncios: http://localhost:3000/api/anuncios
+
+- Tags: http://localhost:3000/api/anuncios/tags
+
+- Usuarios: http://localhost:3000/api/usuarios

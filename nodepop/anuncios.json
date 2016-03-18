@@ -8,7 +8,7 @@
             "foto" : "iphone5.png",
             "tags" : [ 
                 "telefono"
-            ],
+            ]
         }, {
             "nombre" : "Bicicleta",
             "precio" : 50,
@@ -18,7 +18,7 @@
                 "vehiculo", 
                 "transporte", 
                 "ruedas"
-            ],
+            ]
         }, {
             "nombre" : "Ordenador",
             "precio" : 250,
@@ -27,7 +27,7 @@
             "tags" : [ 
                 "ordenador", 
                 "informatica"
-            ],
+            ]
         }, {
             "nombre" : "Mesa",
             "precio" : 100,
@@ -37,7 +37,7 @@
                 "mueble", 
                 "apoyo", 
                 "casa"
-            ],
+            ]
         }, {
             "nombre" : "Cuadro",
             "precio" : 25,
@@ -47,7 +47,7 @@
                 "arte", 
                 "decoracion", 
                 "casa"
-            ],
+            ]
         },{
             "nombre" : "Poster",
             "precio" : 5,
@@ -56,7 +56,7 @@
             "tags" : [ 
                 "arte", 
                 "decoracion"
-            ],
+            ]
         }
     ]
 }
