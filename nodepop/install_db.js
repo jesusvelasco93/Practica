@@ -1,6 +1,7 @@
 "use strict";
 
 var fs = require("fs");
+var async = require("async");
 
 require("./models/anuncio-model");
 require("./models/usuario-model");
@@ -27,19 +28,26 @@ function cargaAnuncios(callback) {
                 var listaAnuncios = JSON.parse(data);
 
                 //Recorremos el array
-                for (var i in listaAnuncios.anuncios) {
-                    var anuncio = new Anuncios(listaAnuncios.anuncios[i]);
+                async.each(listaAnuncios.anuncios, function(anuncioNew, callback) {
+                    var anuncio = new Anuncios(anuncioNew);
                     anuncio.save(function(err) {
 
                         if (err) {
-                            console.log("Ha ocurrido un error con el anuncio", err);
+                            callback("Ha ocurrido un error con el anuncio");
                             return;
                         }
-                        console.log("Anuncio guardado con éxito");
+                        console.log("Anuncio guardado con éxito " + anuncio.nombre);
+                        callback();
                     });
-                }
+                }, function(err) {
+
+                    if (err) {
+                        console.log('Ha occurrido un error en el proceso');
+                    } else {
+                        console.log('Todos los Anuncios guardados');
+                    }
+                });
             }
-            console.log("FIN");
         });
     });
 }
@@ -58,33 +66,44 @@ function cargaUsuarios(callback) {
             } else {
                 var listaUsuarios = JSON.parse(data);
                 // Recorremos el array
-                for (var i in listaUsuarios.usuarios) {
-                    var usuario = new Usuarios(listaUsuarios.usuarios[i]);
+
+                async.each(listaUsuarios.usuarios, function(usuarioNew, callback) {
+
+                    var usuario = new Usuarios(usuarioNew);
                     usuario.clave = sha(usuario.clave);
 
                     usuario.save(function(err) {
                         if (err) {
-                            console.log("Ha ocurrido un error con el usuario", err);
-                            return;
+
+                            callback("Ha ocurrido un error con el usuario");
                         }
-                        console.log("Usuario guardado con éxito");
+                        console.log("Usuario guardado con éxito " + usuario.nombre);
+                        callback();
                     });
-                }
+                }, function(err) {
+
+                    if (err) {
+                        console.log('Ha occurrido un error en el proceso');
+                    } else {
+                        console.log('Todos los Usuarios guardados');
+                    }
+                });
             }
-            console.log("FIN");
         });
     });
 }
 
-// cargaAnuncios(function(err, anuncios) {
-//     if (err) {
-//         console.log("Ha ocurrido un error", err);
-//         return;
-//     }
-//     console.log("Anuncios cargados", anuncios);
-// });
+cargaAnuncios(function(err, anuncios) {
+    console.log("Inicio cargaAnuncios");
+    if (err) {
+        console.log("Ha ocurrido un error", err);
+        return;
+    }
+    console.log("Anuncios cargados", anuncios);
+});
 
 cargaUsuarios(function(err, usuarios) {
+    console.log("Inicio cargaUsuarios");
     if (err) {
         console.log("Ha ocurrido un error", err);
         return;

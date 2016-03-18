@@ -6,8 +6,9 @@ Práctica de HandSon Backend
 1) Descargar proyecto de https://github.com/jesusvelasco93/Practica de la rama develop
 2) Hacer en nodepop, npm install
 3) Arrancar el servidor mongoDB
-4) Hacer npm run install_db.js
+4) Hacer npm run install_db
 5) Hacer nodemon para inicializar el servidor de Nodepop
+6) Revisar jscript con jshint .
 
 ## Documentación para utilizar el API de Nodepop
 
