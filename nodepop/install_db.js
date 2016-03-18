@@ -108,6 +108,10 @@ borrarUsuarios()
     .then(cargaUsuarios)
     .then(borrarAnuncios)
     .then(cargaAnuncios)
+    .then(function(){
+        process.exit();
+    })
     .catch(function(err){
+        process.exit(-1);
         console.log("Error", err);
 });
